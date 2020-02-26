@@ -35,15 +35,59 @@
                     <th scope="row">Fecha de entrega tentativa</th>
                     <td>@Html.DisplayFor(x => x.FechaTentativa)</td>
                 </tr>
+                <tr>
+                    <th colspan="2">Cuotas</th>
+                </tr>
+                @foreach(var cuota in Model.Pagos)
+                {
+                    <tr class="@(cuota.Pagado ? "table-success" : "table-danger")">
+                        <th scope="row">Cuota @cuota.NumeroDeCuota</th>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>@Html.DisplayFor(x => cuota.Monto)</td>
+                                    <td>@Html.DisplayFor(x => cuota.FechaCuota)</td>
+                                </tr>
+                            </table>
+                        </td>         
+                        
+                    </tr>
+                }
+
             }
         </tbody>
     </table>
 </div>
 
-<button asp-action="AutorizarPrestamo" asp-controller="Prestamo" asp-route-id="@Model.Id"></button>
+<button id="autorizar">Autorizar Prestamo</button>
 
 @section Scripts{ 
 <script type="text/javascript">
+    $('#autorizar').on('click', (e) =>
+    {   
+        let url = '@Url.Action("AutorizarPrestamo","Prestamo", new { id = Model.Id })';
+        e.preventDefault();
+        $.get(url, (data) =>
+        {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Exito!',
+                    text: 'El prestamo fué autorizado!',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    onClose: () => window.location.reload()
+                });
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error autorizando el prestamo!',
+                    text: data.errorMessage
+                });
+            }
+        });
 
+    });
 </script>
 }

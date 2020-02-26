@@ -101,12 +101,18 @@ namespace ExamenAconcaguaIdentity.Controllers
         {
             try
             {
+                //Los pagos sólo se pueden autorizar antes del día 20.
+
+
                 var entity = _unitOfWork.PrestamoRepository.Get(id);
                 if (entity == null) throw new ArgumentOutOfRangeException(nameof(id), id, "El id no corresponde a ningúna persona en la base de datos.");
 
                 if (entity.Pagos.Any(c => !c.Pagado))
                     throw new ArgumentOutOfRangeException(nameof(id), id, "La persona tiene un prestamo no pagado vigente.");
-                
+
+                //if (DateTimeOffset.Now.Day > 20)
+                //    return Json(ApiResponse.Error("Los prestamos sólo se pueden autirozar en los primeros 20 días del mes."));
+
                 using (var transaction = _unitOfWork.BeingTransaction())
                 {
                     entity.AutorizacionDelPrestamo = DateTimeOffset.Now;
@@ -117,7 +123,7 @@ namespace ExamenAconcaguaIdentity.Controllers
                     {
                         Cuota cuota = new Cuota
                         {
-                            FechaPago = entity.FechaTentativaDeEntrega.Value.AddMonths(i),
+                            FechaPago = entity.FechaTentativaDeEntrega.Value.AddDays(30*i),
                             Pagado = false,
                             PrestamoId = entity.Id,
                             TotalCuota = valorcuota
@@ -125,6 +131,8 @@ namespace ExamenAconcaguaIdentity.Controllers
                         entity.Pagos.Add(cuota);
                     }
                     _unitOfWork.PrestamoRepository.Update(entity);
+                    _unitOfWork.Save();
+                    transaction.Commit();
                     return Json(ApiResponse.Ok());
                 }
 

@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AutoMapper;
 using ExamenAconcaguaIdentity.Models;
+using System.Globalization;
 
 namespace ExamenAconcaguaIdentity
 {
@@ -77,6 +78,12 @@ namespace ExamenAconcaguaIdentity
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            //Currency
+            var cultureInfo = new CultureInfo("es-AR");
+            cultureInfo.NumberFormat.CurrencySymbol = "$";
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 
 
