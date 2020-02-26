@@ -1,0 +1,31 @@
+﻿@model IEnumerable<ExamenAconcagua.ViewModels.Solicitante.SolicitanteViewModel>
+
+@{
+    ViewData["Title"] = "Lista de solicitantes";
+}
+
+<h1>Lista</h1>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Teléfono Fijo</th>
+                <th scope="col">Teléfono Móvil</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var solicitante in Model)
+            {
+            <tr>
+                <td>@Html.DisplayFor(x => solicitante.Id)</td>
+                <td>@Html.DisplayFor(x => solicitante.NombreCompleto)</td>
+                <td>@Html.DisplayFor(x => solicitante.TelefonoFijo)</td>
+                <td>@Html.DisplayFor(x => solicitante.TelefonoMovil)</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

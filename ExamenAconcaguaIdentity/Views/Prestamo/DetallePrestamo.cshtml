@@ -1,0 +1,49 @@
+﻿@model ExamenAconcaguaIdentity.ViewModels.Prestamos.DetallePrestamoViewModel
+@{
+    ViewData["Title"] = "DetallePrestamo";
+}
+
+<h1>DetallePrestamo</h1>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <th scope="row">DNI Solicitante</th>
+                <td>@Html.DisplayFor(x => x.DniSolicitante)</td>
+            </tr>
+            <tr>
+                <th scope="row">Solicitante</th>
+                <td>@Html.DisplayFor(x => x.NombreCompletoSolicitante)</td>
+            </tr>
+            <tr>
+                <th scope="row">Monto a prestar</th>
+                <td>@Html.DisplayFor(x => x.MontoPrestamo)</td>
+            </tr>
+            <tr>
+                <th scope="row">Cantidad de cuotas</th>
+                <td>@Html.DisplayFor(x => x.Cuotas)</td>
+            </tr>
+
+            @if (Model.PrestamoAutorizado)
+            {
+                <tr>
+                    <th scope="row">Fecha autorización</th>
+                    <td>@Html.DisplayFor(x => x.FechaAutorizacion)</td>
+                </tr>
+                <tr>
+                    <th scope="row">Fecha de entrega tentativa</th>
+                    <td>@Html.DisplayFor(x => x.FechaTentativa)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<button asp-action="AutorizarPrestamo" asp-controller="Prestamo" asp-route-id="@Model.Id"></button>
+
+@section Scripts{ 
+<script type="text/javascript">
+
+</script>
+}

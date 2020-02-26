@@ -1,0 +1,62 @@
+﻿@model ExamenAconcaguaIdentity.ViewModels.Prestamos.NuevoPrestamoViewModel
+
+@{
+    ViewData["Title"] = "NuevoPrestamo";
+}
+
+<h1>NuevoPrestamo</h1>
+
+<form asp-controller="Prestamo" asp-action="NuevoPrestamo" method="post" role="form" class="needs-validation">
+    <!--DNI-->
+    <div class="input-group mb-3">
+        <input class="form-control" placeholder="D.N.I." asp-for="Dni">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="buscar_dni">Buscar</button>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NombreCompleto"></label>
+        <input asp-for="NombreCompleto" class="form-control" readonly="readonly" />
+        <span asp-validation-for="NombreCompleto"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Valor"></label>
+        <input asp-for="Valor" class="form-control" />
+        <span asp-validation-for="Valor"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Cuotas"></label>
+        <select asp-for="Cuotas" asp-items="new SelectList(Model.ListaCuotas)" class="form-control"></select>
+        <span asp-validation-for="Cuotas"></span>
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Enviar"/>
+
+</form>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        $(function ()
+        {
+            var getUrl = '@Url.Action("ObtenerSolicitante", "Solicitante")';
+            $('#buscar_dni').on('click', (e) => {
+                e.preventDefault();                
+                const dni = $('#Dni').val();
+                if (dni && dni.length > 0) {
+                    $.get(getUrl + '/' + dni, (data) => {                        
+                        if (data.success) {
+                            $('#NombreCompleto').val(data.object);
+                        }
+                        else {
+                            Swal.fire('Error', data.errorMessage, 'error');
+                        }
+                    });
+                }
+            })
+        })
+    </script>
+}
